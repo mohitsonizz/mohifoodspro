@@ -28,16 +28,16 @@ def register(request):
             phone_number = form.cleaned_data['phone_number']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            username = email.split("@")[0]
+            username = email
             user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
             user.phone_number = phone_number
             user.save()
 
             # Create a user profile
-            profile = UserProfile()
-            profile.user_id = user.id
-            profile.profile_picture = 'default/default-user.png'
-            profile.save()
+            #profile = UserProfile()
+            #profile.user_id = user.id
+            #profile.profile_picture = 'default/default-user.png'
+            #profile.save()
 
             # USER ACTIVATION
             current_site = get_current_site(request)
@@ -155,7 +155,11 @@ def dashboard(request):
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
     orders_count = orders.count()
 
-    userprofile = UserProfile.objects.get(user_id=request.user.id)
+    # NEW ROBUST CODE
+    userprofile, created = UserProfile.objects.get_or_create(user_id=request.user.id)
+    if not userprofile.profile_picture:
+        userprofile.profile_picture='userprofile/default-user.png'
+        userprofile.save()
     context = {
         'orders_count': orders_count,
         'userprofile': userprofile,

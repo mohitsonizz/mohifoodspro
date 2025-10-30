@@ -3,205 +3,225 @@
 
 {% block content %}
 
-
 <section class="section-content padding-y bg">
-	<div class="container">
+    <div class="container">
 
-		<!-- ============================ COMPONENT 1 ================================= -->
-		<h4 class="text-center mb-20">Review Your Order and Make Payment</h4>
-		<div class="row">
+        <h4 class="text-center mb-20">Review Your Order and Make Payment</h4>
+        <div class="row">
 
-			<aside class="col-lg-8">
-				<div class="card">
-					<h5 class="card-header">Billing Address</h5>
-					<div class="card-body">
-						<p class="card-text mb-0">{{order.full_name}}</p>
-						<p class="card-text mb-0">{{order.full_address}}</p>
-						<p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
-						<p class="card-text mb-0">{{order.country}}</p>
-						<p class="card-text mb-0">{{order.email}}</p>
-						<p class="card-text mb-0">{{order.phone}}</p>
-						{% if order.order_note %}
-						<b>Order Note: </b> {{order.order_note}}
-						{% endif %}
-
-
-					</div>
-				</div>
-				<div class="card">
-					<h5 class="card-header">Payment Method</h5>
-					<div class="card-body">
-						<p class="card-text">PayPal</p>
-
-					</div>
-				</div>
-				<div class="card">
-					<h5 class="card-header">Review Products</h5>
-					<div class="card-body">
-						<table class="table table-borderless table-shopping-cart">
-							<thead class="text-muted">
-								<tr class="small text-uppercase">
-									<th scope="col">Product</th>
-									<th scope="col" width="120">Quantity</th>
-									<th scope="col" width="120">Price</th>
-
-								</tr>
-							</thead>
-							<tbody>
-
-								{% for cart_item in cart_items %}
-								<tr>
-									<td>
-										<figure class="itemside align-items-center">
-											<div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm"></div>
-											<figcaption class="info">
-												<a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
-												<p class="text-muted small">
-													{% if cart_item.variations.all %}
-													{% for item in cart_item.variations.all %}
-													{{ item.variation_category | capfirst }} : {{ item.variation_value | capfirst }} <br>
-													{% endfor %}
-													{% endif %}
-												</p>
-											</figcaption>
-										</figure>
-									</td>
-									<td>
-										<!-- col.// -->
-										<label for="">{{cart_item.quantity}}</label>
-									</td>
-									<td>
-										<div class="price-wrap">
-											<var class="price">$ {{ cart_item.sub_total }}</var>
-											<small class="text-muted"> $ {{ cart_item.product.price }} each </small>
-										</div> <!-- price-wrap .// -->
-									</td>
-
-								</tr>
-								{% endfor %}
-
-							</tbody>
-						</table>
-
-					</div>
-				</div>
-
-			</aside> <!-- col.// -->
-			<aside class="col-lg-4">
-
-				<div class="card">
-					<div class="card-body">
-						<dl class="dlist-align">
-							<dt>Total price:</dt>
-							<dd class="text-right">$ {{total}}</dd>
-						</dl>
-						<dl class="dlist-align">
-							<dt>Tax:</dt>
-							<dd class="text-right"> $ {{tax}}</dd>
-						</dl>
-						<dl class="dlist-align">
-							<dt>Grand Total:</dt>
-							<dd class="text-right text-dark b"><strong>$ {{grand_total}}</strong></dd>
-						</dl>
-						<hr>
-						<p class="text-center mb-3">
-							<img src="{% static './images/misc/payments.png' %}" height="26">
-						</p>
-
-
-						<div id="paypal-button-container">
-							<!-- PayPal Button Will Load -->
-						</div>
-
-					</div> <!-- card-body.// -->
-				</div> <!-- card.// -->
-
-			</aside> <!-- col.// -->
-
-
-		</div> <!-- row.// -->
-
-		<!-- ============================ COMPONENT 1 END .// ================================= -->
-
-	</div> <!-- container .//  -->
-</section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
+            <aside class="col-lg-8">
+                <div class="card mb-3">
+                    <h5 class="card-header">Billing Address</h5>
+                    <div class="card-body">
+                        <p class="card-text mb-0">{{order.full_name}}</p>
+                        <p class="card-text mb-0">{{order.full_address}}</p>
+                        <p class="card-text mb-0">{{order.city}}, {{order.state}}</p>
+                        <p class="card-text mb-0">{{order.country}}</p>
+                        <p class="card-text mb-0">{{order.email}}</p>
+                        <p class="card-text mb-0">{{order.phone}}</p>
+                        {% if order.order_note %}
+                        <b>Order Note: </b> {{order.order_note}}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <h5 class="card-header">Payment Method</h5>
+                    <div class="card-body">
+                        <p class="card-text">Razorpay (Supports Cards, UPI, Netbanking, Wallets)</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h5 class="card-header">Review Products</h5>
+                    <div class="card-body">
+                        <table class="table table-borderless table-shopping-cart">
+                            <thead class="text-muted">
+                                <tr class="small text-uppercase">
+                                    <th scope="col">Product</th>
+                                    <th scope="col" width="120">Quantity</th>
+                                    <th scope="col" width="120">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cart_item in cart_items %}
+                                <tr>
+                                    <td>
+                                        <figure class="itemside align-items-center">
+                                            <div class="aside"><img src="{{ cart_item.product.images.url }}" class="img-sm"></div>
+                                            <figcaption class="info">
+                                                <a href="{{ cart_item.product.get_url }}" class="title text-dark">{{ cart_item.product.product_name }}</a>
+                                                
+                                            </figcaption>
+                                        </figure>
+                                    </td>
+                                    <td>
+                                        <label>{{cart_item.quantity}}</label>
+                                    </td>
+                                    <td>
+                                        <div class="price-wrap">
+                                            <var class="price">$ {{ cart_item.sub_total }}</var>
+                                            <small class="text-muted"> $ {{ cart_item.product.price }} each </small>
+                                        </div> </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </aside> <aside class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="dlist-align">
+                            <dt>Total price:</dt>
+                            <dd class="text-right">$ {{total}}</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>Tax:</dt>
+                            <dd class="text-right"> $ {{tax}}</dd>
+                        </dl>
+                        <dl class="dlist-align">
+                            <dt>Grand Total:</dt>
+                            <dd class="text-right text-dark b"><strong>$ {{grand_total}}</strong></dd>
+                        </dl>
+                        <hr>
+                        <p class="text-center mb-3">
+                            <img src="{% static './images/misc/payments.png' %}" height="26"> </p>
+                        <button id="rzp-button1" class="btn btn-primary btn-block"> Pay $ {{grand_total}} Now </button>
+                        <p class="text-center mt-2 small">Secure Payments by Razorpay</p>
+                    </div> </div> </aside> </div> </div> </section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-
-	function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    // --- CSRF Token Function ---
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-}
+    // --- End CSRF Token Function ---
 
-	var amount = "{{ grand_total }}"
-	var url = "{% url 'payments' %}"
-	var csrftoken = getCookie('csrftoken');
-	var orderID = "{{order.order_number}}"
-	var payment_method = 'PayPal'
-	var redirect_url = "{% url 'order_complete' %}"
-	// Render the PayPal button into #paypal-button-container
-	paypal.Buttons({
+    // --- Razorpay Button Logic ---
+    var options = {
+        key: "{{ razorpay_key_id }}", // Get Key ID from Django context
+        amount: "{{ grand_total_paisa }}", // Amount is in currency subunits (paisa). Passed from Django context.
+        currency: "INR", // Assuming currency is INR. Change if needed.
+        name: "MohiFoods", // Your business name
+        description: "Order Payment - #{{ order.order_number }}",
+        //image: "{% static 'images/logo.png' %}", // Optional: Link to your logo
+        order_id: "", // ** IMPORTANT: This will be obtained from backend **
+        handler: function (response){
+            // This function is called after payment succeeds
+            console.log(response);
+            // Send payment details to your backend for verification
+            verifyPayment(response);
+        },
+        prefill: { // Optional: Prefill customer details
+            name: "{{ order.full_name }}",
+            email: "{{ order.email }}",
+            contact: "{{ order.phone }}"
+        },
+        notes: {
+            address: "{{ order.full_address }}",
+            order_number: "{{ order.order_number }}" // Pass your internal order number
+        },
+        theme: {
+            color: "#3399cc" // Customize theme color
+        }
+    };
 
-		style: {
-			color: 'blue',
-			shape: 'rect',
-			label: 'pay',
-			height: 40
-		},
+    var rzp1 = new Razorpay(options);
 
-		// Set up the transaction
-		createOrder: function(data, actions) {
-			return actions.order.create({
-				purchase_units: [{
-					amount: {
-						value: amount,
-					}
-				}]
-			});
-		},
+    // --- Function to initiate payment ---
+    function startRazorpayPayment() {
+        var startPaymentUrl = "/orders/start_payment/"; // ** URL for your new Django view **
+        var csrftoken = getCookie('csrftoken');
 
-		// Finalize the transaction
-		onApprove: function(data, actions) {
-			return actions.order.capture().then(function(details) {
-				// Show a success message to the buyer
-				console.log(details);
-				sendData();
-				function sendData(){
-					fetch(url, {
-						method : "POST",
-						headers: {
-							"Content-type": "application/json",
-							"X-CSRFToken": csrftoken,
-						},
-						body: JSON.stringify({
-							orderID: orderID,
-							transID: details.id,
-							payment_method: payment_method,
-							status: details.status,
-						}),
-					})
-				  .then((response) => response.json())
-				  .then((data) => {
-						window.location.href = redirect_url + '?order_number='+data.order_number+'&payment_id='+data.transID;
-					});
-				}
-			});
-		}
+        fetch(startPaymentUrl, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify({
+                amount: "{{ grand_total_paisa }}",
+                currency: "INR",
+                receipt: "{{ order.order_number }}" // Your internal order number as receipt
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.order_id){
+                console.log("Razorpay Order ID:", data.order_id);
+                options.order_id = data.order_id; // Set the order_id received from backend
+                rzp1 = new Razorpay(options); // Reinitialize with order_id
+                rzp1.on('payment.failed', function (response){
+                    // Handle payment failure
+                    console.error("Payment Failed:", response);
+                    alert("Payment failed. Please try again or contact support.\nError: " + response.error.description);
+                });
+                rzp1.open(); // Open the Razorpay checkout modal
+            } else {
+                console.error("Could not create Razorpay order:", data);
+                alert("Error initiating payment. Please try again later.");
+            }
+        })
+        .catch(error => {
+            console.error('Error starting Razorpay payment:', error);
+            alert("An error occurred. Please try again later.");
+        });
+    }
 
+    // --- Function to verify payment ---
+    function verifyPayment(response) {
+        var verifyUrl = "/orders/verify_payment/"; // ** URL for your new Django view **
+        var csrftoken = getCookie('csrftoken');
+        var redirect_url = "{% url 'order_complete' %}";
 
-	}).render('#paypal-button-container');
+        fetch(verifyUrl, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+                "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                django_order_number: "{{ order.order_number }}" // Send your internal order number too
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Verification Response:", data);
+            if(data.success) {
+                // Redirect to order complete page on successful verification
+                window.location.href = redirect_url + '?order_number=' + data.order_number + '&payment_id=' + data.transID;
+            } else {
+                alert("Payment verification failed. Please contact support.");
+                // Optionally redirect to a failure page or show more details
+            }
+        })
+        .catch(error => {
+            console.error('Error verifying payment:', error);
+            alert("An error occurred during payment verification. Please contact support.");
+        });
+    }
+
+    // Attach the start payment function to the button click
+    document.getElementById('rzp-button1').onclick = function(e){
+        startRazorpayPayment();
+        e.preventDefault(); // Prevent default button action
+    }
+    // --- End Razorpay Button Logic ---
 </script>
 
 {% endblock %}
